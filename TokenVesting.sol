@@ -5,8 +5,18 @@ import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contr
 
 contract TokenVesting {
     IERC20 public token;
+
+    uint256 public owner;
+
     constructor(address _initialAddress) {
         token = IERC20(_initialAddress);
+
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require(owner == msg.sender, "You Are Not Owner");
+        _;
     }
 
     struct VestingSchedule {
@@ -18,5 +28,17 @@ contract TokenVesting {
         uint256 claimed;
     }
 
-    mapping(address =>uint256) public totalVasted;
+    mapping(uint256 => VestingSchedule) public vestingSchedules;
+
+    mapping(address => uint256[]) public beneficiarySchedules;
+
+    uint256 public nextScheduleId;
+
+    function createVesting(
+        address _beneficiary,
+        uint256 _totalAmount,
+        uint256 _start,
+        uint256 _cliff,
+        uint256 _duration
+    ) public onlyOwner {}
 }
