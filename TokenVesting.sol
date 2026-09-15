@@ -2,7 +2,7 @@
 pragma solidity ^0.8.34;
 
 import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol";
 
 contract TokenVesting is ReentrancyGuard {
@@ -11,6 +11,7 @@ contract TokenVesting is ReentrancyGuard {
     address public owner;
 
     constructor(address _initialAddress) {
+        require(_initialAddress != address(0), "Invalid Address");
         token = IERC20(_initialAddress);
 
         owner = msg.sender;
@@ -147,7 +148,7 @@ contract TokenVesting is ReentrancyGuard {
     function getClaimableAmount(
         uint256 _scheduleId
     ) public view returns (uint256) {
-        VestingSchedule storage schedule = vestingSchedules[_scheduleId];
+        VestingSchedule memory schedule = vestingSchedules[_scheduleId];
 
         if (schedule.revoked) {
             return 0;
@@ -184,6 +185,11 @@ contract TokenVesting is ReentrancyGuard {
         token.transfer(schedule.beneficiary, beneficiaryAmount);
         token.transfer(owner, ownerAmount);
 
-        emit VestingRevoked(_scheduleId, schedule.beneficiary, beneficiaryAmount, ownerAmount);
+        emit VestingRevoked(
+            _scheduleId,
+            schedule.beneficiary,
+            beneficiaryAmount,
+            ownerAmount
+        );
     }
 }
