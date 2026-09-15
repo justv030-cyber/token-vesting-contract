@@ -65,7 +65,7 @@ contract TokenVesting {
     }
 
     function vestedAmount(uint256 _scheduleId) public view  returns (uint256) {
-        vestingSchedules memory schedule = vestingSchedules[_scheduleId];
+        VestingSchedule memory schedule = vestingSchedules[_scheduleId];
 
         if (block.timestamp < schedule.start) {
             return 0;
@@ -76,7 +76,7 @@ contract TokenVesting {
         }
 
 
-        uint256 elapsedTime = block.timestamp - schedule.time;
+        uint256 elapsedTime = block.timestamp - schedule.start;
 
         return (schedule.totalAmount * elapsedTime)/schedule.duration;
     }
