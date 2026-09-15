@@ -54,6 +54,13 @@ contract TokenVesting is ReentrancyGuard {
         uint256 amount
     );
 
+    event VestingRevoked(
+        uint256 indexed scheduleId,
+        address indexed beneficiary,
+        uint256 beneficiaryAmount,
+        uint256 ownerAmount
+    );
+
     function createVesting(
         address _beneficiary,
         uint256 _totalAmount,
@@ -163,7 +170,8 @@ contract TokenVesting is ReentrancyGuard {
         VestingSchedule storage schedule = vestingSchedules[_scheduleId];
 
         require(_scheduleId < nextScheduleId, "Invalid Schedule");
-        require(!schedule.revoked, "Already Rewaked");
+
+        require(!schedule.revoked, "Already Revoked");
 
         uint256 vested = vestedAmount(_scheduleId);
 
@@ -175,5 +183,7 @@ contract TokenVesting is ReentrancyGuard {
 
         token.transfer(schedule.beneficiary, beneficiaryAmount);
         token.transfer(owner, ownerAmount);
+
+        emit VestingRevoked(_scheduleId, schedule.beneficiary, beneficiaryAmount, ownerAmount);
     }
 }
