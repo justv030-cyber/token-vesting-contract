@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.34;
 
-import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
+// import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol";
 
 contract TokenVesting is ReentrancyGuard {
     IERC20 public token;
+    using SafeERC20 for IERC20;
 
     address public owner;
 
@@ -88,7 +89,7 @@ contract TokenVesting is ReentrancyGuard {
 
         beneficiarySchedules[_beneficiary].push(scheduleId);
 
-        token.transferFrom(msg.sender, address(this), _totalAmount);
+        token.safeTransferFrom(msg.sender, address(this), _totalAmount);
 
         nextScheduleId++;
 
@@ -140,7 +141,7 @@ contract TokenVesting is ReentrancyGuard {
 
         schedule.claimed += claimable;
 
-        token.transfer(schedule.beneficiary, claimable);
+        token.safeTransfer(schedule.beneficiary, claimable);
 
         emit TokensClaimed(_scheduleId, schedule.beneficiary, claimable);
     }
@@ -182,8 +183,8 @@ contract TokenVesting is ReentrancyGuard {
 
         schedule.revoked = true;
 
-        token.transfer(schedule.beneficiary, beneficiaryAmount);
-        token.transfer(owner, ownerAmount);
+        token.safeTransfer(schedule.beneficiary, beneficiaryAmount);
+        token.safeTransfer(owner, ownerAmount);
 
         emit VestingRevoked(
             _scheduleId,
