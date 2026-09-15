@@ -3,8 +3,9 @@ pragma solidity ^0.8.34;
 
 import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
 // import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol";
 
-contract TokenVesting {
+contract TokenVesting is ReentrancyGuard {
     IERC20 public token;
 
     address public owner;
@@ -107,7 +108,7 @@ contract TokenVesting {
         return (schedule.totalAmount * elapsedTime) / schedule.duration;
     }
 
-    function claim(uint256 _scheduleId) public {
+    function claim(uint256 _scheduleId) public nonReentrant {
         VestingSchedule storage schedule = vestingSchedules[_scheduleId];
 
         require(
