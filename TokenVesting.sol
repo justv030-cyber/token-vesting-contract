@@ -3,10 +3,20 @@ pragma solidity ^0.8.34;
 
 import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
 
-
-contract TokenVesting{
-    IERC20 public  token;
-    constructor(address _initialAddress){
+contract TokenVesting {
+    IERC20 public token;
+    constructor(address _initialAddress) {
         token = IERC20(_initialAddress);
     }
+
+    struct VestingSchedule {
+        address beneficiary;
+        uint256 totalAmount;
+        uint256 start;
+        uint256 cliff;
+        uint256 duration;
+        uint256 claimed;
+    }
+
+    mapping(address =>uint256) public totalVasted;
 }

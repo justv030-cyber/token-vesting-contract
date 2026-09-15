@@ -129,7 +129,7 @@
     "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol": ".deps/github/openzeppelin/openzeppelin-contracts@master/contracts/token/ERC20/IERC20.sol",
     "__sources__": {
       "TokenVesting.sol": {
-        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.34;\r\n\r\nimport \"https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol\";\r\n\r\n\r\ncontract TokenVesting{\r\n    IERC20 public  token;\r\n    constructor(address _initialAddress){\r\n        token = IERC20(_initialAddress);\r\n    }\r\n}",
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.34;\n\nimport \"https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol\";\n\ncontract TokenVesting {\n    IERC20 public token;\n    constructor(address _initialAddress) {\n        token = IERC20(_initialAddress);\n    }\n\n    struct VestingSchedule {\n        address beneficiary;\n        uint256 totalAmount;\n        uint256 start;\n        uint256 cliff;\n        uint256 duration;\n        uint256 claimed;\n    }\n\n    mapping(address =>uint256) public totalVasted;\n}\n",
         "file": "TokenVesting.sol"
       },
       "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol": {
