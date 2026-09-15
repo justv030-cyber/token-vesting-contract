@@ -69,7 +69,7 @@ contract TokenVesting is ReentrancyGuard {
         uint256 _start,
         uint256 _cliff,
         uint256 _duration
-    ) public onlyOwner {
+    ) public onlyOwner nonReentrant {
         require(_beneficiary != address(0), "Invalid beneficiary");
         require(_totalAmount > 0, "Amount Must Be Greater Than Zero");
         require(_duration > 0, "Duration must be greater than Zero");
