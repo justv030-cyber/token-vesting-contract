@@ -59,6 +59,25 @@ contract TokenVesting {
 
         beneficiarySchedules[_beneficiary].push(scheduleId);
 
+        token.transferFrom(msg.sender, address(this), _totalAmount);
+
         nextScheduleId++;
+    }
+
+    function vestedAmount(uint256 _scheduleId) public view  returns (uint256) {
+        vestingSchedules memory schedule = vestingSchedules[_scheduleId];
+
+        if (block.timestamp < schedule.start) {
+            return 0;
+        }
+
+        if (block.timestamp >= schedule.start + schedule.duration) {
+            return schedule.totalAmount;
+        }
+
+
+        uint256 elapsedTime = block.timestamp - schedule.time;
+
+        return (schedule.totalAmount * elapsedTime)/schedule.duration;
     }
 }
