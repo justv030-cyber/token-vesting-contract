@@ -6,7 +6,7 @@ import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contr
 contract TokenVesting {
     IERC20 public token;
 
-    uint256 public owner;
+    address public owner;
 
     constructor(address _initialAddress) {
         token = IERC20(_initialAddress);
@@ -40,5 +40,25 @@ contract TokenVesting {
         uint256 _start,
         uint256 _cliff,
         uint256 _duration
-    ) public onlyOwner {}
+    ) public onlyOwner {
+        require(_beneficiary != address(0), "Invalid beneficiary");
+        require(_totalAmount > 0, "Amount Must Be Greater Than Zero");
+        require(_duration > 0, "Duration must be greater than Zero");
+        require(_cliff <= _duration, "Cliff exceeds duration");
+
+        uint256 scheduleId = nextScheduleId;
+
+        vestingSchedules[scheduleId] = VestingSchedule({
+            beneficiary: _beneficiary,
+            totalAmount: _totalAmount,
+            start: _start,
+            cliff: _cliff,
+            duration: _duration,
+            claimed: 0
+        });
+
+        beneficiarySchedules[_beneficiary].push(scheduleId);
+
+        nextScheduleId++;
+    }
 }
