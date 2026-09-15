@@ -2,6 +2,7 @@
 pragma solidity ^0.8.34;
 
 import "https://github.com/openzeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract TokenVesting {
     IERC20 public token;
@@ -34,6 +35,23 @@ contract TokenVesting {
 
     uint256 public nextScheduleId;
 
+    //events
+
+    event VestingCreated(
+        uint256 indexed scheduleId,
+        address indexed beneficiary,
+        uint256 totalAmount,
+        uint256 start,
+        uint256 cliff,
+        uint256 duration
+    );
+
+    event TokensClaimed(
+        uint256 indexed scheduleId,
+        address indexed beneficiary,
+        uint256 amount
+    );
+
     function createVesting(
         address _beneficiary,
         uint256 _totalAmount,
@@ -62,6 +80,15 @@ contract TokenVesting {
         token.transferFrom(msg.sender, address(this), _totalAmount);
 
         nextScheduleId++;
+
+        emit VestingCreated(
+            scheduleId,
+            _beneficiary,
+            _totalAmount,
+            _start,
+            _cliff,
+            _duration
+        );
     }
 
     function vestedAmount(uint256 _scheduleId) public view returns (uint256) {
@@ -101,5 +128,7 @@ contract TokenVesting {
         schedule.claimed += claimable;
 
         token.transfer(schedule.beneficiary, claimable);
+
+        emit TokensClaimed(_scheduleId, schedule.beneficiary, claimable);
     }
 }

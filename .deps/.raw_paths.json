@@ -20,5 +20,13 @@
   "@openzeppelin/contracts@5.6.1/interfaces/IERC5267.sol": ".deps/npm/@openzeppelin/contracts@5.6.1/interfaces/IERC5267.sol",
   "@openzeppelin/contracts@5.6.1/utils/ShortStrings.sol": ".deps/npm/@openzeppelin/contracts@5.6.1/utils/ShortStrings.sol",
   "@openzeppelin/contracts@5.6.1/utils/Nonces.sol": ".deps/npm/@openzeppelin/contracts@5.6.1/utils/Nonces.sol",
-  "https://raw.githubusercontent.com/openzeppelin/openzeppelin-contracts/master/contracts/token/ERC20/IERC20.sol": ".deps/github/openzeppelin/openzeppelin-contracts@master/contracts/token/ERC20/IERC20.sol"
+  "https://raw.githubusercontent.com/openzeppelin/openzeppelin-contracts/master/contracts/token/ERC20/IERC20.sol": ".deps/github/openzeppelin/openzeppelin-contracts@master/contracts/token/ERC20/IERC20.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/token/ERC20/utils/SafeERC20.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/token/ERC20/utils/SafeERC20.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/interfaces/IERC20Metadata.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/interfaces/IERC20Metadata.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/token/ERC20/extensions/IERC20Metadata.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/token/ERC20/extensions/IERC20Metadata.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/token/ERC20/IERC20.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/token/ERC20/IERC20.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/interfaces/IERC1363.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/interfaces/IERC1363.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/interfaces/IERC20.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/interfaces/IERC20.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/interfaces/IERC165.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/interfaces/IERC165.sol",
+  "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/utils/introspection/IERC165.sol": ".deps/github/OpenZeppelin/openzeppelin-contracts@master/contracts/utils/introspection/IERC165.sol"
 }
