@@ -28,6 +28,7 @@ contract TokenVesting is ReentrancyGuard {
         uint256 cliff;
         uint256 duration;
         uint256 claimed;
+        bool revoked;
     }
 
     mapping(uint256 => VestingSchedule) public vestingSchedules;
@@ -73,7 +74,8 @@ contract TokenVesting is ReentrancyGuard {
             start: _start,
             cliff: _cliff,
             duration: _duration,
-            claimed: 0
+            claimed: 0,
+            revoked: false
         });
 
         beneficiarySchedules[_beneficiary].push(scheduleId);
@@ -111,6 +113,8 @@ contract TokenVesting is ReentrancyGuard {
     function claim(uint256 _scheduleId) public nonReentrant {
         VestingSchedule storage schedule = vestingSchedules[_scheduleId];
 
+        require(!schedule.revoked, "Vesting Revoked");
+
         require(
             msg.sender == schedule.beneficiary,
             "Only the beneficiary can claim"
@@ -138,10 +142,38 @@ contract TokenVesting is ReentrancyGuard {
     ) public view returns (uint256) {
         VestingSchedule storage schedule = vestingSchedules[_scheduleId];
 
+        if (schedule.revoked) {
+            return 0;
+        }
+
+        uint256 cliffTime = schedule.start + schedule.cliff;
+
+        if (block.timestamp < cliffTime) {
+            return 0;
+        }
+
         uint256 vested = vestedAmount(_scheduleId);
 
         uint256 claimable = vested - schedule.claimed;
 
         return claimable;
+    }
+
+    function revoke(uint256 _scheduleId) public onlyOwner nonReentrant {
+        VestingSchedule storage schedule = vestingSchedules[_scheduleId];
+
+        require(_scheduleId < nextScheduleId, "Invalid Schedule");
+        require(!schedule.revoked, "Already Rewaked");
+
+        uint256 vested = vestedAmount(_scheduleId);
+
+        uint256 beneficiaryAmount = vested - schedule.claimed;
+
+        uint256 ownerAmount = schedule.totalAmount - vested;
+
+        schedule.revoked = true;
+
+        token.transfer(schedule.beneficiary, beneficiaryAmount);
+        token.transfer(owner, ownerAmount);
     }
 }
