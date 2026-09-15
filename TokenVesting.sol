@@ -64,7 +64,7 @@ contract TokenVesting {
         nextScheduleId++;
     }
 
-    function vestedAmount(uint256 _scheduleId) public view  returns (uint256) {
+    function vestedAmount(uint256 _scheduleId) public view returns (uint256) {
         VestingSchedule memory schedule = vestingSchedules[_scheduleId];
 
         if (block.timestamp < schedule.start) {
@@ -75,9 +75,31 @@ contract TokenVesting {
             return schedule.totalAmount;
         }
 
-
         uint256 elapsedTime = block.timestamp - schedule.start;
 
-        return (schedule.totalAmount * elapsedTime)/schedule.duration;
+        return (schedule.totalAmount * elapsedTime) / schedule.duration;
+    }
+
+    function claim(uint256 _scheduleId) public {
+        VestingSchedule storage schedule = vestingSchedules[_scheduleId];
+
+        require(
+            msg.sender == schedule.beneficiary,
+            "Only the beneficiary can claim"
+        );
+
+        uint256 cliffTime = schedule.start + schedule.cliff;
+
+        require(block.timestamp >= cliffTime, "Cliff not reached");
+
+        uint256 vested = vestedAmount(_scheduleId);
+
+        uint256 claimable = vested - schedule.claimed;
+
+        require(claimable > 0, "Nothing For Claim");
+
+        schedule.claimed += claimable;
+
+        token.transfer(schedule.beneficiary, claimable);
     }
 }
