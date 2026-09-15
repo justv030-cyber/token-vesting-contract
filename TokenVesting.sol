@@ -131,4 +131,16 @@ contract TokenVesting {
 
         emit TokensClaimed(_scheduleId, schedule.beneficiary, claimable);
     }
+
+    function checkClaimedAmount(
+        uint256 _scheduleId
+    ) public view returns (uint256) {
+        VestingSchedule storage schedule = vestingSchedules[_scheduleId];
+
+        uint256 vested = vestedAmount(_scheduleId);
+
+        uint256 claimable = vested - schedule.claimed;
+
+        return claimable;
+    }
 }
